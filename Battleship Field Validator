@@ -1,0 +1,107 @@
+//Takes a 10x10 2D array representing a battleship board and returns true if the board is valid.
+//https://www.codewars.com/kata/52bb6539a4cf1b12d90005b7
+
+def validate_battlefield(field)
+  battleships = 0 
+  cruisers = 0
+  destroyers = 0
+  submarines = 0
+  validated = Hash.new
+  for row in 0...field.size
+    for column in 0...field[row].size
+      if field[row][column] == 1 && !validated.has_key?("[#{row}, #{column}]")
+        ship = Ship.new(field, row, column)
+        #puts ship.name
+        ship.cells.each { |cell| validated[cell] = "checked" }
+        battleships += 1 if ship.shipClass == "battleship"
+        cruisers += 1 if ship.shipClass == "cruiser"
+        destroyers += 1 if ship.shipClass == "destroyer"
+        submarines += 1 if ship.shipClass == "submarine"
+        return false if ship.anomalyDetected || ship.shipClass == "invalid" 
+      end
+    end
+  end
+  
+  #puts "bs: #{battleships} c:#{cruisers} d:#{destroyers} s:#{submarines}"
+  return false unless battleships == 1 && cruisers == 2 && destroyers == 3 && submarines == 4
+  return true
+  
+end
+
+class Ship
+  
+  attr_reader :cells
+  attr_reader :shipClass
+  attr_reader :name
+  attr_reader :anomalyDetected
+  
+  def initialize(field, row, column)
+    @cells = []
+    @field = field
+    @shipClass = ""
+    @name = ""
+    @anomalyDetected = false
+    findNext([row, column], "")
+    determineShipClass()
+    setName(row, column)
+    puts @name
+  end
+
+  def findNext(cell, direction)
+    #flags ships with "unnatural" geometries
+    @anomalyDetected = true if findSouthEast(cell) == 1 
+    @anomalyDetected = true if findSouthWest(cell) == 1
+    @anomalyDetected = true if findEast(cell) == 1 && findSouth(cell) == 1   
+    #recursively finds from a single point
+    if findEast(cell) == 0 && findSouth(cell) == 0
+      @cells.push(cell.to_s)
+    elsif findEast(cell) == 1 and direction != "south"
+      @cells.push(cell.to_s)
+      findNext([cell[0],cell[1]+1], "east")
+    elsif findSouth(cell) == 1 and direction != "east"
+      @cells.push(cell.to_s)
+      findNext([cell[0]+1,cell[1]], "south")
+    end
+  end
+  
+  def findEast(cell)
+    return 0 if cell[1]+1 > 9
+    @field[cell[0]][cell[1]+1]
+  end
+  
+  def findSouth(cell)
+    return 0 if cell[0]+1 > 9
+    @field[cell[0]+1][cell[1]]
+  end
+    
+  def findSouthEast(cell)
+    return 0 if cell[0]+1 > 9 || cell[1]+1 > 9
+    @field[cell[0]+1][cell[1]+1]
+  end
+  
+  def findSouthWest(cell)
+    return 0 if cell[0]+1 > 9 || cell[1]-1 < 0
+    @field[cell[0]+1][cell[1]-1]
+  end
+  
+  def determineShipClass()
+    case cells.size
+      when 4
+        @shipClass = "battleship"
+      when 3
+        @shipClass =  "cruiser"
+      when 2
+        @shipClass =  "destroyer"
+      when 1
+        @shipClass =  "submarine"
+      else
+        @shipClass =  "invalid"
+        @anomalyDetected = true
+      end
+  end
+    
+  #for debug purposes
+  def setName(row, column)
+    @name = "#{@shipClass}-[#{row},#{column}]"
+  end    
+end

@@ -1,4 +1,5 @@
 //Takes a 2D array representing a sudoku field and returns true if the solution is valid. Otherwise it returns false. 
+//Solution for: https://www.codewars.com/kata/529bf0e9bdf7657179000008
 
 def validSolution(board)
   for i in 0..8

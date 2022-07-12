@@ -1,5 +1,5 @@
-//Takes a string of Parentheses and returns true if the order of parens is valid.
-//Solution for: https://www.codewars.com/kata/52774a314c2333f0a7000688
+#Takes a string of Parentheses and returns true if the order of parens is valid.
+#Solution for: https://www.codewars.com/kata/52774a314c2333f0a7000688
 
 def valid_parentheses(string)
   leftParens = 0

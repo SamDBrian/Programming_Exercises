@@ -1,0 +1,16 @@
+//Takes an RGB value and converts it to hex format
+//https://www.codewars.com/kata/513e08acc600c94f01000001
+
+def rgb(r, g, b)
+  "#{toHex(r)}#{toHex(g)}#{toHex(b)}"
+end
+
+def toHex(int)
+  if int < 0
+    "00"
+  elsif int > 255
+    "FF"
+  else
+    int.to_s(16).upcase.rjust(2, "0")
+  end
+end

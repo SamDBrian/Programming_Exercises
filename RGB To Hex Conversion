@@ -1,5 +1,5 @@
-//Takes an RGB value and converts it to hex format
-//https://www.codewars.com/kata/513e08acc600c94f01000001
+#Takes an RGB value and converts it to hex format
+#https://www.codewars.com/kata/513e08acc600c94f01000001
 
 def rgb(r, g, b)
   "#{toHex(r)}#{toHex(g)}#{toHex(b)}"

@@ -1,3 +1,5 @@
+//Takes a string and returns the same string, but with all words with 5 or more characters reversed.
+
 def spin_words(string) 
   output = ""
   string.split.each {|word|

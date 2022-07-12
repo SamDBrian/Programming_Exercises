@@ -1,0 +1,65 @@
+//Given a n x n array, returns the array arranged from the outermost elements to the middle element. Traveling clockwise. 
+//https://www.codewars.com/kata/521c2db8ddc89b9b7a0000c1
+
+def snail(map)
+  Snail.new(map).path_traveled.values
+end
+
+class Snail
+  attr_reader :path_traveled
+  
+  def initialize(map)
+    @path_traveled = Hash.new
+    @map = map
+    @heading = "E"
+    @y = 0
+    @x = 0
+    
+    explore()
+  end  
+  
+  def explore()
+    everywhere = @map.flatten.size unless @map == nil
+    if @map != nil || everywhere > 0
+      for i in 0...everywhere
+        visitLocation(@y, @x)
+        determineHeading()
+        move()
+      end
+    end
+  end
+  
+  def iHaveAlreadyBeenTo(y, x)
+    @path_traveled.has_key?("#{y},#{x}") 
+  end
+  
+  def visitLocation(y, x)
+    @path_traveled["#{y},#{x}"] = @map[y][x]
+  end
+  
+  def determineHeading()
+    case @heading
+      when "N"
+       @heading = "E" if iHaveAlreadyBeenTo(@y-1,@x)
+      when "W"
+       @heading = "N" if (iHaveAlreadyBeenTo(@y,@x-1) || ((@x-1) < 0))
+      when "S"
+       @heading = "W" if (iHaveAlreadyBeenTo(@y+1,@x) || ((@y+1) == @map.size))
+      when "E"
+       @heading = "S" if (iHaveAlreadyBeenTo(@y,@x+1) || ((@x+1) == @map[0].size))
+    end
+  end
+  
+  def move()
+    case @heading
+      when "N"
+        @y -= 1
+      when "W"
+        @x -= 1
+      when "S"
+        @y += 1
+      when "E"
+        @x += 1
+    end
+  end
+end

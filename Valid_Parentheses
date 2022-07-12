@@ -1,0 +1,18 @@
+//Takes a string of Parentheses and returns true if the order of parens is valid.
+
+def valid_parentheses(string)
+  leftParens = 0
+  rightParens = 0
+  if string.length >= 0 && string.length <= 100
+    for i in 0...string.length
+      if string[i] == "("
+        leftParens += 1
+      elsif string[i] == ")"
+        rightParens += 1     
+        return false if rightParens > leftParens
+      end
+    end
+    return true if leftParens == rightParens  
+  end  
+  return false
+end

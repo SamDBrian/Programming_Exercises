@@ -1,5 +1,5 @@
-//Takes a 10x10 2D array representing a battleship board and returns true if the board is valid.
-//https://www.codewars.com/kata/52bb6539a4cf1b12d90005b7
+#Takes a 10x10 2D array representing a battleship board and returns true if the board is valid.
+#https://www.codewars.com/kata/52bb6539a4cf1b12d90005b7
 
 def validate_battlefield(field)
   battleships = 0 

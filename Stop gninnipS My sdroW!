@@ -1,0 +1,12 @@
+def spin_words(string) 
+  output = ""
+  string.split.each {|word|
+    if word.length > 4
+      output = output + "#{word.reverse} "
+    else
+      output = output + "#{word} "
+    end
+  }
+  output.strip
+  
+end

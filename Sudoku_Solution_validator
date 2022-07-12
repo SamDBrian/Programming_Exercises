@@ -1,0 +1,51 @@
+//Takes a 2D array representing a sudoku field and returns true if the solution is valid. Otherwise it returns false. 
+
+def validSolution(board)
+  for i in 0..8
+    square = validateSquare(board, i)
+    column = validateColumn(board, i)
+    row = validateRow(board,i)
+    return false unless row && square && column
+  end
+  return true
+end
+
+def validateSquare(board, pos)
+  numbers = Hash.new
+  
+  startX = (pos - ((pos/3).floor * 3) ) * 3
+  startY = 3 * ((pos/3).floor)
+    
+  for x in 0..2
+    for y in 0..2
+      finalX = startX + x
+      finalY = startY + y
+      return false unless validateNumber(board, numbers, finalX, finalY)
+    end
+  end
+  return true
+end
+
+def validateColumn(board, column)
+  numbers = Hash.new
+  for y in 0..8
+    return false unless validateNumber(board, numbers, column, y)
+  end
+  return true
+end
+
+def validateRow(board, row)
+  numbers = Hash.new
+  for x in 0..8
+    return false unless validateNumber(board, numbers, x, row)
+  end
+  return true
+end
+
+def validateNumber(board, hash, x, y)
+  numToEval = board[x][y] 
+  return false if numToEval < 1 || numToEval > 9 || hash[numToEval] != nil 
+  hash[numToEval] = true
+  return true
+end
+

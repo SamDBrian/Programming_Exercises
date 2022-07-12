@@ -1,0 +1,81 @@
+//Takes an amount of seconds (non-negative integer) and converts it into a human readable time format.
+//https://www.codewars.com/kata/52742f58faf5485cae000b9a
+
+def format_duration(seconds)
+  return "now" if seconds == 0 || seconds == nil
+  stringParts = breakDownNumbers(seconds)
+  result = stringParts[0]
+  if stringParts.size > 1
+    for i in 1...stringParts.size
+      if i == (stringParts.size-1)
+        result = "#{result} and #{stringParts[i]}"     
+      else 
+        result = "#{result}, #{stringParts[i]}"
+      end
+    end   
+  end
+  
+  return result
+end
+
+def breakDownNumbers(seconds, stringParts=[])
+  
+  timeUnit = TimeUnit.new(seconds)
+ 
+  if seconds == 0
+    return stringParts
+  elsif seconds < 60
+    stringParts.push("#{seconds} #{timeUnit.nameFinal}")
+    return stringParts
+  else
+    value = (seconds / timeUnit.secondsInA).floor
+    remainder = seconds % timeUnit.secondsInA
+    stringParts.push("#{value} #{timeUnit.nameFinal}")
+    return breakDownNumbers(remainder, stringParts)
+  end
+end    
+
+class TimeUnit
+  
+  attr_reader:secondsInA
+  attr_reader:nameFinal
+  
+  def initialize(seconds)
+    @name = ""
+    @secondsInA = 0
+    @seconds = seconds
+    determineScale()
+    @nameFinal = pluralizeName()
+
+  end  
+  
+  def determineScale()
+    if @seconds >= (86400 * 365)
+        @name = "year"
+        @secondsInA = (86400 * 365)
+    elsif @seconds >= 86400
+        @name = "day"
+        @secondsInA = 86400
+    elsif @seconds >= 3600
+        @name = "hour"  
+        @secondsInA = 3600
+    elsif @seconds >= 60
+        @name = "minute"
+        @secondsInA = 60
+        @maxSec = 3600  
+    else
+        @name = "second"
+        @secondsInA = 1
+    end  
+  end
+  
+  def pluralizeName()
+    if (@seconds / @secondsInA).floor == 1
+      return "#{@name}"
+    else
+      return "#{@name}s"
+    end
+  end
+  
+end
+
